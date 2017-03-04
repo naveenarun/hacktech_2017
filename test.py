@@ -3,6 +3,13 @@ import requests
 import os
 import sys
 
+tagcommand = r'''xattr -wx com.apple.metadata:_kMDItemUserTags \
+    "$(xattr -px com.apple.metadata:_kMDItemUserTags "%s" | \
+        xxd -r -p - - | plutil -convert json -o - - | sed 's/[][]//g' | tr ',' '\n' | \
+	    (cat -; echo \"%s\") | sort -u | grep . | tr '\n' ',' | sed 's/,$//' | \
+	        sed 's/\(.*\)/[\1]/' | plutil -convert binary1 -o - - | xxd -p - -)" "%s"'''
+print tagcommand % ('beach.jpeg','tree','beach.jpeg')
+sys.exit()
 # Import library to display results
 import matplotlib.pyplot as plt
 _url = 'https://westus.api.cognitive.microsoft.com/vision/v1.0/analyze'
