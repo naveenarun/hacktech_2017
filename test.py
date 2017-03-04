@@ -1,8 +1,7 @@
 import time 
 import requests
-import operator
-import numpy as np
 import os
+import sys
 
 # Import library to display results
 import matplotlib.pyplot as plt
@@ -10,7 +9,11 @@ _url = 'https://westus.api.cognitive.microsoft.com/vision/v1.0/analyze'
 _key = 'e603af62bcca48f5ac497802bbae3a44'  #Here you have to paste your primary key
 _maxNumRetries = 10
 os.system('source tags.sh')
-mypics = [os.getcwd() + '/' + i for i in os.listdir(os.getcwd()) if i[-4:]=="jpeg" or i[-3:] in ('png','jpg','gif','bmp')]
+if len(sys.argv) > 1:
+	basedir = sys.argv[1]
+else:
+	basedir = os.getcwd()
+mypics = [basedir + '/' + i for i in os.listdir(os.getcwd()) if i[-4:]=="jpeg" or i[-3:] in ('png','jpg','gif','bmp')]
 
 def processRequest( json, data, headers, params ):
 
@@ -59,20 +62,6 @@ def processRequest( json, data, headers, params ):
         
     return result
 
-def renderResultOnImage( result, img ):
-    
-    """Display the obtained results onto the input image"""
-
-    R = int(result['color']['accentColor'][:2],16)
-    G = int(result['color']['accentColor'][2:4],16)
-    B = int(result['color']['accentColor'][4:],16)
-
-    cv2.rectangle( img,(0,0), (img.shape[1], img.shape[0]), color = (R,G,B), thickness = 25 )
-
-    if 'categories' in result:
-        categoryName = sorted(result['categories'], key=lambda x: x['score'])[0]['name']
-        cv2.putText( img, categoryName, (30,70), cv2.FONT_HERSHEY_SIMPLEX, 2, (255,0,0), 3 )
-
 
 for imgurl in mypics:
 	# Load raw image file into memory
@@ -81,7 +70,7 @@ for imgurl in mypics:
 	    data = f.read()
 	    
 	# Computer Vision parameters
-	params = { 'visualFeatures' : 'Color,Categories,Tags'} 
+	params = { 'visualFeatures' : 'Tags'} 
 
 	headers = dict()
 	headers['Ocp-Apim-Subscription-Key'] = _key
