@@ -8,7 +8,6 @@ _url = 'https://westus.api.cognitive.microsoft.com/vision/v1.0/analyze'
 _key = 'e603af62bcca48f5ac497802bbae3a44'  #Here you have to paste your primary key
 _maxNumRetries = 10
 os.system('source tags.sh')
-img_res = 512
 if len(sys.argv) > 1:
 	mypics = [sys.argv[1]]
 else:
@@ -64,10 +63,8 @@ def processRequest( json, data, headers, params ):
 
 for imgurl in mypics:
 	# Load raw image file into memory
-	pathToTempFolder = os.environ["TMPDIR"] + "/hacktech/"
-	os.system('qlmanage -t ' + imgurl + ' -s ' + str(img_res) + ' -o ' + pathToTempFolder)
-	pathToThumbnail = pathToTempFolder + imgurl.split('/')[-1] + '.png'
-	with open( pathToThumbnail, 'rb' ) as f:
+	pathToFileInDisk = imgurl
+	with open( pathToFileInDisk, 'rb' ) as f:
 	    data = f.read()
 	    
 	# Computer Vision parameters
@@ -80,8 +77,8 @@ for imgurl in mypics:
 	json = None
 
 	result = processRequest( json, data, headers, params )
-	print(result['tags'])
+	print result['tags']
 
 	for r in [i['name'] for i in result['tags'] if i['confidence'] > 0.5]:
-		os.system('tags -add %s %s' % (r, imgurl))
+		os.system('tag -add %s %s' % (r, imgurl))
 

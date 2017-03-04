@@ -13,3 +13,4 @@ picture_paths = [os.path.join(dirpath, f)
 
 for i in picture_paths:
 	subprocess.call(['python',os.getcwd() + '/test.py', i])
+
