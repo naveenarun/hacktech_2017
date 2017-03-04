@@ -12,4 +12,4 @@ picture_paths = [os.path.join(dirpath, f)
         for f in files if max([f.endswith(i) for i in ('.jpeg','.jpg','.png', '.gif', '.bmp')])]
 
 for i in picture_paths:
-	subprocess.call(['python2.7',os.getcwd() + '/test2.py', i])
+	subprocess.call(['python',os.getcwd() + '/test.py', i])

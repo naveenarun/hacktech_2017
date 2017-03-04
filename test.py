@@ -3,24 +3,15 @@ import requests
 import os
 import sys
 
-tagcommand = r'''xattr -wx com.apple.metadata:_kMDItemUserTags \
-    "$(xattr -px com.apple.metadata:_kMDItemUserTags "%s" | \
-        xxd -r -p - - | plutil -convert json -o - - | sed 's/[][]//g' | tr ',' '\n' | \
-	    (cat -; echo \"%s\") | sort -u | grep . | tr '\n' ',' | sed 's/,$//' | \
-	        sed 's/\(.*\)/[\1]/' | plutil -convert binary1 -o - - | xxd -p - -)" "%s"'''
-print tagcommand % ('beach.jpeg','tree','beach.jpeg')
-sys.exit()
 # Import library to display results
-import matplotlib.pyplot as plt
 _url = 'https://westus.api.cognitive.microsoft.com/vision/v1.0/analyze'
 _key = 'e603af62bcca48f5ac497802bbae3a44'  #Here you have to paste your primary key
 _maxNumRetries = 10
 os.system('source tags.sh')
 if len(sys.argv) > 1:
-	basedir = sys.argv[1]
+	mypics = [sys.argv[1]]
 else:
-	basedir = os.getcwd()
-mypics = [basedir + '/' + i for i in os.listdir(os.getcwd()) if i[-4:]=="jpeg" or i[-3:] in ('png','jpg','gif','bmp')]
+	mypics = [os.getcwd() + '/' + i for i in os.listdir(os.getcwd()) if i[-4:]=="jpeg" or i[-3:] in ('png','jpg','gif','bmp')]
 
 def processRequest( json, data, headers, params ):
 
