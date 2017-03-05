@@ -1,5 +1,4 @@
 mydir=$PWD
-. ./tags.sh
 cd $TMPDIR
 mkdir hacktech
 cd hacktech
