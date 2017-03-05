@@ -1,6 +1,5 @@
 import os
 import sys
-import subprocess
 
 if len(sys.argv) > 1:
 	path = sys.argv[1]
@@ -12,5 +11,5 @@ picture_paths = [os.path.join(dirpath, f)
         for f in files if max([f.endswith(i) for i in ('.jpeg','.jpg','.png', '.gif', '.bmp')])]
 
 for i in picture_paths:
-	subprocess.call(['python',os.getcwd() + '/test.py', i])
+	os.system('python ' + os.getcwd() + '/test.py ' + '\'' + i + '\'')
 
